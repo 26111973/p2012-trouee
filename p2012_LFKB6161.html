@@ -685,7 +685,7 @@ canvas{width:100%;display:block;border-radius:var(--radius);border:1px solid var
       <button class="tab ae on" id="tab-ae" onclick="setMode(&#39;AE&#39;)">
         <div style="font-size:13px;margin-bottom:2px">✈</div>
         <div>Tous moteurs</div>
-        <div style="font-size:9px;font-weight:400;opacity:.75;margin-top:2px">AE · 1 104 ft/min</div>
+        <div style="font-size:9px;font-weight:400;opacity:.75;margin-top:2px">AE · 1 201 ft/min</div>
       </button>
       <button class="tab oei" id="tab-oei" onclick="setMode(&#39;OEI&#39;)">
         <div style="font-size:13px;margin-bottom:2px">⚠</div>
@@ -753,7 +753,7 @@ canvas{width:100%;display:block;border-radius:var(--radius);border:1px solid var
 
     <div class="afm-note">
       Distances depuis tables AFM §4 (alt terrain + temp.) · MTOM 3 680 kg · piste sèche · vent calme<br>
-      Montée AE: 1 104 ft/min · N-1 ROC: 118 ft/min (volets 0 · Vyse 92 kt) · Pente N-1: 1,23 %
+      Montée AE: 1 201 ft/min · N-1 ROC: 118 ft/min (volets 0 · Vyse 92 kt) · Pente N-1: 1,23 %
     </div>
   </div>
 </div>
@@ -770,7 +770,7 @@ canvas{width:100%;display:block;border-radius:var(--radius);border:1px solid var
     <div class="metrics">
       <div class="metric ok" id="m-slope"><div class="ml">Pente montée</div><div class="mv" id="v-slope">12.0%</div><div class="ms" id="s-slope">Tous moteurs</div></div>
       <div class="metric" id="m-d50"><div class="ml">Distance / 50 ft obs.</div><div class="mv" id="v-d50">672 m</div><div class="ms" id="s-d50">(2205 ft)</div></div>
-      <div class="metric" id="m-roc"><div class="ml" id="ml-roc">Taux montée</div><div class="mv" id="v-roc">1102 ft/min</div><div class="ms" id="s-roc">Vy 91 kt · Volets TO</div></div>
+      <div class="metric" id="m-roc"><div class="ml" id="ml-roc">Taux montée</div><div class="mv" id="v-roc">1102 ft/min</div><div class="ms" id="s-roc">Vy 96 kt · Volets UP</div></div>
       <div class="metric" id="m-da"><div class="ml">Alt. densité</div><div class="mv" id="v-da">50 ft</div><div class="ms" id="s-da">ISA +50 ft</div></div>
     </div>
     <div id="warn-area"><div class="wline">ℹ️ Distances AFM (alt 40ft · 15°C · MTOM) : roulement 205m · dist. 50ft 672m</div></div>
@@ -1715,7 +1715,7 @@ function update(){
     document.getElementById('m-roc').className='metric '+(roc>=80?'ok':roc>=30?'warn':'bad');
   } else {
     document.getElementById('ml-roc').textContent='Taux montée';
-    document.getElementById('s-roc').textContent='Vy 91 kt · Volets TO';
+    document.getElementById('s-roc').textContent='Vy 96 kt · Volets UP';
     document.getElementById('m-roc').className='metric';
   }
   document.getElementById('v-da').textContent=r.da+' ft';
