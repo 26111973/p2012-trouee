@@ -1195,20 +1195,34 @@ const AFM = {
   aeROC:       1201,    // ft/min AE climb rate SL ISA MTOM Vy=96 kt Flaps UP
   aeVy:        96,      // kt
 
-  // AFM AE ROC (ft/min) — Flaps UP, Vy 96 kt, MTOM 3680 kg
-  // [pressAlt_ft] → { tempC → ROC }
+  // AFM AE ROC (ft/min) — Flaps UP, Vy 96 kt, 3680 kg
   aeROC_table: {
-       0: {'-25':1207, '-15':1204,  '0':1203, '15':1201, '30':1198, '50':1197},
-    2000: {'-25':1204, '-15':1203,  '0':1200, '15':1198, '30':1196, '50':1195},
-    4000: {'-25':1201, '-15':1200,  '0':1197, '15':1196, '30':1193, '50':1192},
-    6000: {'-25':1198, '-15':1197,  '0':1195, '15':1193, '30':1192, '50':1160},
-    8000: {'-25':1196, '-15':1195,  '0':1192, '15':1186, '30':1148, '50':1067},
-   10000: {'-25':1193, '-15':1192,  '0':1173, '15':1119, '30':1047, '50': 913},
-   12000: {'-25':1184, '-15':1154,  '0':1086, '15': 990, '30': 882, '50': 749},
-   14000: {'-25':1108, '-15':1052,  '0': 934, '15': 822, '30': 718, '50': 586},
-   16000: {'-25': 967, '-15': 884,  '0': 766, '15': 655, '30': 553, '50': 423},
-   18000: {'-25': 796, '-15': 714,  '0': 598, '15': 490, '30': 388, '50': 262},
-   19500: {'-25': 668, '-15': 586,  '0': 472, '15': 366, '30': 266, '50': 142},
+       0: {'-40':1212, '-25':1207, '-15':1204,  '0':1203, '15':1201, '30':1198, '50':1197},
+    2000: {'-40':1206, '-25':1204, '-15':1203,  '0':1200, '15':1198, '30':1196, '50':1195},
+    4000: {'-40':1203, '-25':1201, '-15':1200,  '0':1197, '15':1196, '30':1193, '50':1192},
+    6000: {'-40':1200, '-25':1198, '-15':1197,  '0':1195, '15':1193, '30':1192, '50':1160},
+    8000: {'-40':1198, '-25':1196, '-15':1195,  '0':1192, '15':1186, '30':1148, '50':1067},
+   10000: {'-40':1195, '-25':1193, '-15':1192,  '0':1173, '15':1119, '30':1047, '50': 913},
+   12000: {'-40':1229, '-25':1184, '-15':1154,  '0':1086, '15': 990, '30': 882, '50': 749},
+   14000: {'-40':1192, '-25':1108, '-15':1052,  '0': 934, '15': 822, '30': 718, '50': 586},
+   16000: {'-40':1092, '-25': 967, '-15': 884,  '0': 766, '15': 655, '30': 553, '50': 423},
+   18000: {'-40': 919, '-25': 796, '-15': 714,  '0': 598, '15': 490, '30': 388, '50': 262},
+   19500: {'-40': 791, '-25': 668, '-15': 586,  '0': 472, '15': 366, '30': 266, '50': 142},
+  },
+
+  // AFM AE ROC (ft/min) — Flaps UP, Vy 96 kt, 3400 kg
+  aeROC_table_3400: {
+       0: {'-40':1372, '-25':1372, '-15':1372,  '0':1372, '15':1372, '30':1372, '50':1372},
+    2000: {'-40':1372, '-25':1372, '-15':1372,  '0':1372, '15':1372, '30':1372, '50':1371},
+    4000: {'-40':1372, '-25':1372, '-15':1372,  '0':1372, '15':1372, '30':1371, '50':1371},
+    6000: {'-40':1372, '-25':1372, '-15':1372,  '0':1371, '15':1371, '30':1371, '50':1341},
+    8000: {'-40':1374, '-25':1372, '-15':1371,  '0':1371, '15':1367, '30':1329, '50':1243},
+   10000: {'-40':1371, '-25':1371, '-15':1371,  '0':1354, '15':1297, '30':1222, '50':1081},
+   12000: {'-40':1410, '-25':1365, '-15':1335,  '0':1262, '15':1162, '30':1050, '50': 910},
+   14000: {'-40':1375, '-25':1286, '-15':1227,  '0':1105, '15': 987, '30': 876, '50': 739},
+   16000: {'-40':1271, '-25':1139, '-15':1051,  '0': 927, '15': 812, '30': 703, '50': 569},
+   18000: {'-40':1087, '-25': 958, '-15': 872,  '0': 751, '15': 637, '30': 531, '50': 399},
+   19500: {'-40': 949, '-25': 823, '-15': 739,  '0': 619, '15': 507, '30': 402, '50': 272},
   },
 
   oeiROC_to:   40,      // ft/min OEI TO flaps (AFM §5)
@@ -1217,20 +1231,34 @@ const AFM = {
   oeiVxse:     86,      // kt Vxse
   oeiSlopePct: 1.23,    // % certified OEI climb gradient SL ISA MTOM
 
-  // AFM §5 OEI ROC (ft/min) — Flaps UP, Vyse 92 kt, MTOM 3680 kg
-  // [pressAlt_ft] → { tempC → ROC }
+  // AFM §5 OEI ROC (ft/min) — Flaps UP, Vyse 92 kt, 3680 kg
   oeiROC_table: {
-       0: {'-25':130, '-15':127,  '0':123, '15':118, '30':115, '50':110},
-    2000: {'-25':124, '-15':122,  '0':117, '15':114, '30':110, '50':105},
-    4000: {'-25':120, '-15':116,  '0':113, '15':107, '30':104, '50':101},
-    6000: {'-25':114, '-15':111,  '0':106, '15':103, '30': 99, '50': 75},
-    8000: {'-25':108, '-15':105,  '0':102, '15': 98, '30': 62, '50': -3},
-   10000: {'-25':103, '-15': 99,  '0': 91, '15': 36, '30':-15, '50':-80},
-   12000: {'-25': 97, '-15': 68,  '0': 10, '15':-44, '30':-94, '50':-157},
-   14000: {'-25': 28, '-15':-12,  '0':-69, '15':-123,'30':-171,'50':-234},
-   16000: {'-25':-53, '-15':-93,  '0':-149,'15':-201,'30':-249,'50':-310},
-   18000: {'-25':-135,'-15':-174, '0':-229,'15':-280,'30':-327,'50':-387},
-   19500: {'-25':-196,'-15':-234, '0':-288,'15':-338,'30':-385,'50':-444},
+       0: {'-40':135, '-25':130, '-15':127,  '0':123, '15':118, '30':115, '50':110},
+    2000: {'-40':127, '-25':124, '-15':122,  '0':117, '15':114, '30':110, '50':105},
+    4000: {'-40':126, '-25':120, '-15':116,  '0':113, '15':107, '30':104, '50':101},
+    6000: {'-40':119, '-25':114, '-15':111,  '0':106, '15':103, '30': 99, '50': 75},
+    8000: {'-40':113, '-25':108, '-15':105,  '0':102, '15': 98, '30': 62, '50': -3},
+   10000: {'-40':109, '-25':103, '-15': 99,  '0': 91, '15': 36, '30':-15, '50':-80},
+   12000: {'-40':141, '-25': 97, '-15': 68,  '0': 10, '15':-44, '30':-94, '50':-157},
+   14000: {'-40': 88, '-25': 28, '-15':-12,  '0':-69, '15':-123,'30':-171,'50':-234},
+   16000: {'-40':  7, '-25':-53, '-15':-93,  '0':-149,'15':-201,'30':-249,'50':-310},
+   18000: {'-40':-77, '-25':-135,'-15':-174, '0':-229,'15':-280,'30':-327,'50':-387},
+   19500: {'-40':-139,'-25':-196,'-15':-234, '0':-288,'15':-338,'30':-385,'50':-444},
+  },
+
+  // AFM §5 OEI ROC (ft/min) — Flaps UP, Vyse 92 kt, 3400 kg
+  oeiROC_table_3400: {
+       0: {'-40':208, '-25':206, '-15':205,  '0':203, '15':201, '30':199, '50':197},
+    2000: {'-40':207, '-25':204, '-15':202,  '0':200, '15':199, '30':197, '50':195},
+    4000: {'-40':203, '-25':201, '-15':200,  '0':198, '15':197, '30':195, '50':193},
+    6000: {'-40':201, '-25':199, '-15':198,  '0':196, '15':194, '30':193, '50':169},
+    8000: {'-40':198, '-25':196, '-15':195,  '0':194, '15':192, '30':156, '50': 87},
+   10000: {'-40':196, '-25':194, '-15':193,  '0':186, '15':127, '30': 73, '50':  5},
+   12000: {'-40':237, '-25':192, '-15':162,  '0':101, '15': 44, '30':-10, '50':-77},
+   14000: {'-40':184, '-25':119, '-15': 76,  '0': 16, '15':-40, '30':-93, '50':-158},
+   16000: {'-40': 94, '-25': 32, '-15': -9,  '0':-68, '15':-123,'30':-175,'50':-239},
+   18000: {'-40':  6, '-25':-54, '-15':-94,  '0':-152,'15':-206,'30':-257,'50':-320},
+   19500: {'-40':-58, '-25':-118,'-15':-158, '0':-215,'15':-268,'30':-318,'50':-380},
   },
 
   // AFM §4 takeoff dist 50ft (m): [pressAlt_ft][ISA_delta]
@@ -1260,7 +1288,7 @@ const AFM = {
 // ═══════════════════════════════════════════════════════════════
 let mode = 'AE';
 let obstacles = defaultObstacles();
-const BUILTIN_PROFILES ={"LFKB-16":{"mode":"AE","fields":{"ap-oaci":"LFKB","ap-name":"Bastia-Poretta","ap-qfu":"160","ap-rwy-len":"2520","ap-thr-ft":"26","ap-thr-m":"3.9","sl-mass":"3680","sl-alt":"0","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"160","w-spd":"8"},"obstacles":[{"name":"Pylône / antenne zone nord","dist":300,"altFt":82,"htM":18,"showOnMap":true},{"name":"Arbre ou arbuste zone boisée 1","dist":700,"altFt":65,"htM":12,"showOnMap":true},{"name":"Ligne électrique HT","dist":1200,"altFt":59,"htM":20,"showOnMap":true},{"name":"Bâtiment industriel","dist":1800,"altFt":85,"htM":15,"showOnMap":true},{"name":"Relief côtier SE","dist":2600,"altFt":130,"htM":0,"showOnMap":true},{"name":"Arbre ou arbuste zone boisée 2","dist":3200,"altFt":148,"htM":10,"showOnMap":true},{"name":"Relief montagneux Est","dist":4500,"altFt":820,"htM":0,"showOnMap":true}],"vacState":{"cx":517,"cy":863,"qfuMag":160,"rwyLenM":2520,"zoom":1,"panX":0,"panY":0}},"LFKB-34":{"mode":"AE","fields":{"ap-oaci":"LFKB","ap-name":"Bastia-Poretta","ap-qfu":"340","ap-rwy-len":"2520","ap-thr-ft":"26","ap-thr-m":"7.9","sl-mass":"3680","sl-alt":"0","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"340","w-spd":"10"},"obstacles":[{"name":"Balisage / infrastructure seuil 34","dist":150,"altFt":56,"htM":8,"showOnMap":true},{"name":"Végétation basse zone humide","dist":500,"altFt":39,"htM":6,"showOnMap":true},{"name":"Ligne électrique BT","dist":1100,"altFt":49,"htM":12,"showOnMap":true},{"name":"Bâtiment / hangar","dist":1700,"altFt":72,"htM":12,"showOnMap":true},{"name":"Relief massif montagneux NO","dist":2800,"altFt":1150,"htM":0,"showOnMap":true},{"name":"Chaîne montagneuse — point critique","dist":4200,"altFt":3500,"htM":0,"showOnMap":true}],"vacState":{"cx":517,"cy":863,"qfuMag":340,"rwyLenM":2520,"zoom":1,"panX":0,"panY":0}},"LFKC-18":{"mode":"AE","fields":{"ap-oaci":"LFKC","ap-name":"Calvi Ste-Catherine","ap-qfu":"177","ap-rwy-len":"2310","ap-thr-ft":"66","ap-thr-m":"20.0","sl-mass":"3680","sl-alt":"200","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"177","w-spd":"8"},"obstacles":[{"name":"Relief Col de Marsolinu","dist":2000,"altFt":2930,"htM":0,"showOnMap":true},{"name":"Relief montagneux S","dist":4000,"altFt":4557,"htM":0,"showOnMap":true}],"vacState":{"cx":491,"cy":655,"qfuMag":177,"rwyLenM":2310,"zoom":1,"panX":0,"panY":0}},"LFKC-36":{"mode":"AE","fields":{"ap-oaci":"LFKC","ap-name":"Calvi Ste-Catherine","ap-qfu":"357","ap-rwy-len":"2310","ap-thr-ft":"210","ap-thr-m":"64.0","sl-mass":"3680","sl-alt":"200","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"357","w-spd":"10"},"obstacles":[{"name":"CV 375 (zone parachutisme)","dist":500,"altFt":375,"htM":0,"showOnMap":true},{"name":"Relief NW côtier","dist":1500,"altFt":434,"htM":0,"showOnMap":true}],"vacState":{"cx":491,"cy":655,"qfuMag":357,"rwyLenM":2310,"zoom":1,"panX":0,"panY":0}},"LFKJ-20":{"mode":"AE","fields":{"ap-oaci":"LFKJ","ap-name":"Ajaccio Napoléon Bonaparte","ap-qfu":"202","ap-rwy-len":"2300","ap-thr-ft":"18","ap-thr-m":"5.5","sl-mass":"3680","sl-alt":"0","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"202","w-spd":"8"},"obstacles":[],"vacState":{"cx":438,"cy":620,"qfuMag":209,"rwyLenM":2300,"zoom":1,"panX":0,"panY":0},"vacAP":"LFKJ"},"LFKJ-02":{"mode":"AE","fields":{"ap-oaci":"LFKJ","ap-name":"Ajaccio Napoléon Bonaparte","ap-qfu":"22","ap-rwy-len":"2300","ap-thr-ft":"18","ap-thr-m":"5.5","sl-mass":"3680","sl-alt":"0","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"22","w-spd":"8"},"obstacles":[],"vacState":{"cx":438,"cy":620,"qfuMag":29,"rwyLenM":2300,"zoom":1,"panX":0,"panY":0},"vacAP":"LFKJ"}}; // profils pré-chargés (ne jamais modifier)
+const BUILTIN_PROFILES ={"LFKB-16":{"mode":"AE","fields":{"ap-oaci":"LFKB","ap-name":"Bastia-Poretta","ap-qfu":"160","ap-rwy-len":"2520","ap-thr-ft":"26","ap-thr-m":"3.9","sl-mass":"3680","sl-alt":"0","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"160","w-spd":"8"},"obstacles":[{"name":"Pylône / antenne zone nord","dist":300,"altFt":82,"htM":18,"showOnMap":true},{"name":"Arbre ou arbuste zone boisée 1","dist":700,"altFt":65,"htM":12,"showOnMap":true},{"name":"Ligne électrique HT","dist":1200,"altFt":59,"htM":20,"showOnMap":true},{"name":"Bâtiment industriel","dist":1800,"altFt":85,"htM":15,"showOnMap":true},{"name":"Relief côtier SE","dist":2600,"altFt":130,"htM":0,"showOnMap":true},{"name":"Arbre ou arbuste zone boisée 2","dist":3200,"altFt":148,"htM":10,"showOnMap":true},{"name":"Relief montagneux Est","dist":4500,"altFt":820,"htM":0,"showOnMap":true}],"vacState":{"cx":517,"cy":863,"qfuMag":160,"rwyLenM":2520,"zoom":1,"panX":0,"panY":0}},"LFKB-34":{"mode":"AE","fields":{"ap-oaci":"LFKB","ap-name":"Bastia-Poretta","ap-qfu":"340","ap-rwy-len":"2520","ap-thr-ft":"26","ap-thr-m":"3.9","sl-mass":"3680","sl-alt":"0","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"340","w-spd":"10"},"obstacles":[{"name":"Balisage / infrastructure seuil 34","dist":150,"altFt":56,"htM":8,"showOnMap":true},{"name":"Végétation basse zone humide","dist":500,"altFt":39,"htM":6,"showOnMap":true},{"name":"Ligne électrique BT","dist":1100,"altFt":49,"htM":12,"showOnMap":true},{"name":"Bâtiment / hangar","dist":1700,"altFt":72,"htM":12,"showOnMap":true},{"name":"Relief massif montagneux NO","dist":2800,"altFt":1150,"htM":0,"showOnMap":true},{"name":"Chaîne montagneuse — point critique","dist":4200,"altFt":3500,"htM":0,"showOnMap":true}],"vacState":{"cx":517,"cy":863,"qfuMag":340,"rwyLenM":2520,"zoom":1,"panX":0,"panY":0}},"LFKC-18":{"mode":"AE","fields":{"ap-oaci":"LFKC","ap-name":"Calvi Ste-Catherine","ap-qfu":"177","ap-rwy-len":"2310","ap-thr-ft":"66","ap-thr-m":"20.0","sl-mass":"3680","sl-alt":"200","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"177","w-spd":"8"},"obstacles":[{"name":"Relief Col de Marsolinu","dist":2000,"altFt":2930,"htM":0,"showOnMap":true},{"name":"Relief montagneux S","dist":4000,"altFt":4557,"htM":0,"showOnMap":true}],"vacState":{"cx":491,"cy":655,"qfuMag":177,"rwyLenM":2310,"zoom":1,"panX":0,"panY":0}},"LFKC-36":{"mode":"AE","fields":{"ap-oaci":"LFKC","ap-name":"Calvi Ste-Catherine","ap-qfu":"357","ap-rwy-len":"2310","ap-thr-ft":"210","ap-thr-m":"64.0","sl-mass":"3680","sl-alt":"200","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"357","w-spd":"10"},"obstacles":[{"name":"CV 375 (zone parachutisme)","dist":500,"altFt":375,"htM":0,"showOnMap":true},{"name":"Relief NW côtier","dist":1500,"altFt":434,"htM":0,"showOnMap":true}],"vacState":{"cx":491,"cy":655,"qfuMag":357,"rwyLenM":2310,"zoom":1,"panX":0,"panY":0}},"LFKJ-20":{"mode":"AE","fields":{"ap-oaci":"LFKJ","ap-name":"Ajaccio Napoléon Bonaparte","ap-qfu":"202","ap-rwy-len":"2300","ap-thr-ft":"18","ap-thr-m":"5.5","sl-mass":"3680","sl-alt":"0","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"202","w-spd":"8"},"obstacles":[],"vacState":{"cx":438,"cy":620,"qfuMag":209,"rwyLenM":2300,"zoom":1,"panX":0,"panY":0},"vacAP":"LFKJ"},"LFKJ-02":{"mode":"AE","fields":{"ap-oaci":"LFKJ","ap-name":"Ajaccio Napoléon Bonaparte","ap-qfu":"22","ap-rwy-len":"2300","ap-thr-ft":"18","ap-thr-m":"5.5","sl-mass":"3680","sl-alt":"0","sl-temp":"15","sl-surf":"1.0","sl-eap":"0","in-eap":"0","w-dir":"22","w-spd":"8"},"obstacles":[],"vacState":{"cx":438,"cy":620,"qfuMag":29,"rwyLenM":2300,"zoom":1,"panX":0,"panY":0},"vacAP":"LFKJ"}}; // profils pré-chargés (ne jamais modifier)
 let profiles = JSON.parse(JSON.stringify(BUILTIN_PROFILES)); // copie mutable
 let currentProfile = null;
 
@@ -1367,7 +1395,12 @@ function applyState(s){
   }
   const thrFt = parseFloat(document.getElementById('ap-thr-ft').value)||0;
   document.getElementById('sl-alt').value = Math.max(0,Math.min(6000,Math.round(thrFt/100)*100));
-  document.getElementById('ap-thr-m').value = (thrFt*0.3048).toFixed(1);
+  // Utiliser la valeur ap-thr-m du profil si disponible, sinon recalculer depuis ap-thr-ft
+  if(s.fields && s.fields['ap-thr-m'] !== undefined){
+    document.getElementById('ap-thr-m').value = s.fields['ap-thr-m'];
+  } else {
+    document.getElementById('ap-thr-m').value = (thrFt*0.3048).toFixed(1);
+  }
   setMode(mode);
 }
 
@@ -1534,11 +1567,10 @@ function afmInterp(table, pressAltFt, tempC){
   return (v00+(v01-v00)*df2)+(((v10+(v11-v10)*df2)-(v00+(v01-v00)*df2))*af);
 }
 
-// Bilinear interpolation of AE ROC from AFM table [pressAlt_ft][tempC]
-function aeROC_interp(pressAltFt, tempC){
-  const tbl = AFM.aeROC_table;
-  const altKeys = [0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000, 19500];
-  const tempKeys = [-25, -15, 0, 15, 30, 50];
+// Trilinear interpolation of AE ROC from AFM tables [pressAlt_ft][tempC] × mass
+function aeROC_interp(pressAltFt, tempC, massKg){
+  const altKeys  = [0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000, 19500];
+  const tempKeys = [-40, -25, -15, 0, 15, 30, 50];
 
   const a0 = altKeys.reduce((prev,k) => k <= pressAltFt ? k : prev, altKeys[0]);
   const a1 = altKeys.find(k => k > a0) ?? a0;
@@ -1548,31 +1580,46 @@ function aeROC_interp(pressAltFt, tempC){
   const t1 = tempKeys.find(k => k > t0) ?? t0;
   const tf = t0 === t1 ? 0 : (tempC - t0) / (t1 - t0);
 
-  function lk(a, t){ const row = tbl[a] || tbl[0]; return row[String(t)] ?? row['15'] ?? 1201; }
-  const v00=lk(a0,t0), v01=lk(a0,t1), v10=lk(a1,t0), v11=lk(a1,t1);
-  return (v00 + (v01-v00)*tf) + ((v10 + (v11-v10)*tf) - (v00 + (v01-v00)*tf)) * af;
+  function interpTable(tbl){
+    function lk(a, t){ const row = tbl[a] || tbl[0]; return row[String(t)] ?? row['0'] ?? 1201; }
+    const v00=lk(a0,t0), v01=lk(a0,t1), v10=lk(a1,t0), v11=lk(a1,t1);
+    return (v00 + (v01-v00)*tf) + ((v10 + (v11-v10)*tf) - (v00 + (v01-v00)*tf)) * af;
+  }
+
+  const roc3680 = interpTable(AFM.aeROC_table);
+  const roc3400 = interpTable(AFM.aeROC_table_3400);
+
+  // Interpolate between 3400 and 3680 kg (clamp outside range)
+  const mf = Math.max(0, Math.min(1, (massKg - 3400) / (3680 - 3400)));
+  return roc3400 + (roc3680 - roc3400) * mf;
 }
 
-// Bilinear interpolation of OEI ROC from AFM table [pressAlt_ft][tempC]
-// Returns ROC at MTOM (mass factor applied in compute())
-function oeiROC_interp(pressAltFt, tempC){
-  const tbl = AFM.oeiROC_table;
-  const altKeys = [0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000, 19500];
-  const tempKeys = [-25, -15, 0, 15, 30, 50];
+// Trilinear interpolation of OEI ROC from AFM tables [pressAlt_ft][tempC] × mass
+function oeiROC_interp(pressAltFt, tempC, massKg){
+  const altKeys  = [0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000, 19500];
+  const tempKeys = [-40, -25, -15, 0, 15, 30, 50];
 
-  // Clamp altitude
   const a0 = altKeys.reduce((prev,k) => k <= pressAltFt ? k : prev, altKeys[0]);
   const a1 = altKeys.find(k => k > a0) ?? a0;
   const af = a0 === a1 ? 0 : (pressAltFt - a0) / (a1 - a0);
 
-  // Clamp temperature
   const t0 = tempKeys.reduce((prev,k) => k <= tempC ? k : prev, tempKeys[0]);
   const t1 = tempKeys.find(k => k > t0) ?? t0;
   const tf = t0 === t1 ? 0 : (tempC - t0) / (t1 - t0);
 
-  function lk(a, t){ const row = tbl[a] || tbl[0]; return row[String(t)] ?? row['15'] ?? 118; }
-  const v00=lk(a0,t0), v01=lk(a0,t1), v10=lk(a1,t0), v11=lk(a1,t1);
-  return (v00 + (v01-v00)*tf) + ((v10 + (v11-v10)*tf) - (v00 + (v01-v00)*tf)) * af;
+  // Interpolate in one AFM mass table
+  function interpTable(tbl){
+    function lk(a, t){ const row = tbl[a] || tbl[0]; return row[String(t)] ?? row['0'] ?? 118; }
+    const v00=lk(a0,t0), v01=lk(a0,t1), v10=lk(a1,t0), v11=lk(a1,t1);
+    return (v00 + (v01-v00)*tf) + ((v10 + (v11-v10)*tf) - (v00 + (v01-v00)*tf)) * af;
+  }
+
+  const roc3680 = interpTable(AFM.oeiROC_table);
+  const roc3400 = interpTable(AFM.oeiROC_table_3400);
+
+  // Interpolate between 3400 and 3680 kg (clamp outside range)
+  const mf = Math.max(0, Math.min(1, (massKg - 3400) / (3680 - 3400)));
+  return roc3400 + (roc3680 - roc3400) * mf;
 }
 
 function compute(){
@@ -1590,7 +1637,7 @@ function compute(){
   const W=wf(mass), D=df(da), Wd=wdistF(windKt);
 
   const pressAlt=altFt;
-  const aeROC=Math.round(aeROC_interp(pressAlt, tempC) / W);
+  const aeROC=Math.round(aeROC_interp(pressAlt, tempC, mass));
   const aeSlope=+((aeROC/9721.8)*100).toFixed(3);
   const rollAE_ref=afmInterp(AFM.roll50,pressAlt,tempC);
   const dist50AE_ref=afmInterp(AFM.tod50,pressAlt,tempC);
@@ -1598,7 +1645,7 @@ function compute(){
   const dist50AE=Math.round(dist50AE_ref*W*Wd*surf);
 
   const oeiVy=AFM.oeiVyse;
-  const oeiROC=Math.round(oeiROC_interp(pressAlt, tempC) / W);
+  const oeiROC=Math.round(oeiROC_interp(pressAlt, tempC, mass));
   const oeiSlope=+((oeiROC/9316.7)*100).toFixed(3);
   const dist50OEI=dist50AE;
   const rollOEI=rollAE;
