@@ -587,6 +587,128 @@ canvas{width:100%;display:block;border-radius:var(--radius);border:1px solid var
 .eap-dot{width:10px;height:10px;border-radius:50%;background:var(--danger);flex-shrink:0}
 .ap-cv-info{font-size:10px;font-weight:600;color:var(--text2);margin-bottom:4px;font-family:var(--mono)}
 
+/* ── VALIDATION PILOTE ── */
+.valid-block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:10px 14px;margin-bottom:10px}
+.valid-block .sec{margin-bottom:8px}
+
+/* Rangée principale : checkbox+texte | champs */
+.valid-main-row{display:flex;gap:10px;align-items:stretch;padding:10px 12px;border-radius:var(--radius);border:2px solid var(--border);background:var(--bg3);transition:border-color .15s,background .15s}
+.valid-main-row.checked{border-color:var(--ok);background:rgba(29,158,117,.08)}
+
+/* Colonne gauche : checkbox + texte certification */
+.valid-left{display:flex;gap:8px;align-items:flex-start;flex:0 0 auto;max-width:160px}
+.valid-left input[type=checkbox]{width:16px;height:16px;accent-color:var(--ok);flex-shrink:0;margin-top:2px;cursor:pointer}
+
+/* Séparateur vertical */
+.valid-main-row::after{content:'';display:none}
+
+/* Colonne droite : 3 champs empilés */
+.valid-right{display:flex;flex-direction:column;gap:5px;flex:1;border-left:1px solid var(--border2);padding-left:10px}
+
+.valid-check-text{font-size:9px;color:var(--text2);line-height:1.5}
+.valid-check-text strong{color:var(--text);display:block;margin-bottom:2px;font-size:10px}
+
+.valid-field label{display:block;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.valid-field input{width:100%;padding:3px 6px;font-size:11px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg2);color:var(--text);font-family:var(--mono);box-sizing:border-box}
+.valid-field input:focus{outline:none;border-color:var(--accent)}
+
+.valid-status{margin-top:8px;font-size:10px;text-align:center;font-weight:600;padding:5px;border-radius:var(--radius)}
+.valid-status.ok{color:var(--ok);background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.3)}
+.valid-status.pending{color:var(--warn);background:rgba(239,159,39,.1);border:1px solid rgba(239,159,39,.3)}
+
+/* ── BOUTON EXPORT PDF ── */
+.pdf-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border-radius:var(--radius-lg);border:none;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;transition:all .2s;margin-bottom:10px}
+.pdf-btn.ready{background:linear-gradient(135deg,#1a5fa8,#3B8BD4);color:#fff;box-shadow:0 2px 8px rgba(59,139,212,.35)}
+.pdf-btn.ready:hover{background:linear-gradient(135deg,#174f8c,#2d78c4);box-shadow:0 4px 14px rgba(59,139,212,.5)}
+.pdf-btn.locked{background:var(--bg3);color:var(--text3);border:1px solid var(--border);cursor:not-allowed}
+
+
+/* ── PRINT ── */
+@media print{
+  /* Reset couleurs globales */
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+  body{background:#fff!important;color:#111!important;font-size:10pt}
+
+  /* Masquer uniquement les contrôles inutiles */
+  .page-nav,.profile-bar,.tabs,.pdf-btn,.addbtn,
+  .del2,.btn-axis,.pb-actions,.pb-btn,.pb-input,
+  .vac-controls,.valid-block .sec,
+  #oei-block button, .eap-row, #sl-eap, #in-eap,
+  .topbar-right .ap-block button,
+  input[type=range]{display:none!important}
+
+  /* Afficher toutes les pages */
+  .page{display:block!important}
+
+  /* Layout : passer en colonne unique */
+  .cols{display:block!important}
+  .cols > div{width:100%!important;margin-bottom:12px}
+
+  /* Cards */
+  .card{background:#fff!important;border:1px solid #bbb!important;
+        border-radius:4px!important;padding:8px 10px!important;
+        margin-bottom:10px!important;break-inside:avoid}
+
+  /* Métriques */
+  .metrics{display:grid!important;grid-template-columns:1fr 1fr 1fr 1fr!important;gap:6px!important}
+  .metric{background:#f5f5f5!important;border:1px solid #ccc!important;border-radius:3px!important}
+  .ml{color:#555!important}
+  .ms{color:#777!important}
+  .ok .mv{color:#0f7a56!important}
+  .warn .mv{color:#a06010!important}
+  .bad .mv{color:#b52020!important}
+
+  /* Badge */
+  .badge.ok{background:#e6f7f1!important;color:#0f7a56!important;border:1px solid #9ad6be!important}
+  .badge.warn{background:#fef6e6!important;color:#a06010!important;border:1px solid #f0c87a!important}
+  .badge.nok{background:#fde8e8!important;color:#b52020!important;border:1px solid #f0a0a0!important}
+
+  /* Canvas */
+  canvas{width:100%!important;max-height:380px!important;
+         border:1px solid #ccc!important;display:block!important}
+
+  /* Tableau obstacles */
+  .obs2-table thead tr{background:#3B8BD4!important}
+  .obs2-table th{color:#fff!important}
+  .obs2-table tr.obs-ok td{background:rgba(29,158,117,.1)!important}
+  .obs2-table tr.obs-nok td{background:rgba(226,75,74,.1)!important}
+  .obs2-table tr.obs-offaxis td{background:rgba(239,159,39,.1)!important}
+  .obs2-table td{border-bottom:1px solid #ddd!important}
+
+  /* Vent */
+  .wind-box{background:#f5f5f5!important;border:1px solid #ccc!important}
+  .wval{color:#111!important}
+  .wlbl,.wsub{color:#666!important}
+
+  /* Topbar */
+  .topbar{background:#ddeaf6!important;border:1px solid #aac!important}
+  h1{color:#111!important}
+  .sub{color:#555!important}
+
+  /* Note AFM */
+  .afm-note{color:#666!important;border-top:1px solid #ddd!important}
+
+  /* En-tête impression */
+  .print-header{display:block!important}
+
+  /* Bloc validation : afficher en print */
+  .valid-block{background:#fff!important;border:1px solid #bbb!important}
+  .valid-main-row{border:1px solid #bbb!important;background:#f9f9f9!important}
+  .valid-check-text{color:#333!important}
+  .valid-check-text strong{color:#111!important}
+  .valid-status.ok{background:#e6f7f1!important;color:#0f7a56!important;border:1px solid #9ad6be!important}
+  .valid-field input{border:1px solid #ccc!important;background:#fff!important;color:#111!important}
+  .valid-field label{color:#666!important}
+
+  /* Sauts de page */
+  #page2{page-break-before:always}
+  #page3{display:none!important}
+}
+.print-header{display:none;font-size:10px;color:#555;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #ccc}
+.print-header table{width:100%;border-collapse:collapse;font-size:10px}
+.print-header td{padding:2px 6px;border:1px solid #ddd}
+.print-header td:first-child{font-weight:600;background:#f0f0f0;width:120px}
+
 /* Vent mini-display */
 .wind-box{background:var(--bg3);border-radius:var(--radius);padding:6px 8px;border:1px solid var(--border2)}
 .wind-box-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;text-align:center}
@@ -726,8 +848,7 @@ canvas{width:100%;display:block;border-radius:var(--radius);border:1px solid var
       <select id="sl-surf" onchange="update()">
         <option value="1.0">Béton/asphalte sec</option>
         <option value="1.1">Asphalte humide</option>
-        <option value="1.15">Herbe courte sèche</option>
-        <option value="1.25">Herbe courte humide</option>
+
       </select>
     </div>
 
@@ -753,13 +874,24 @@ canvas{width:100%;display:block;border-radius:var(--radius);border:1px solid var
     </div>
 
     <div class="afm-note">
-      Distances depuis tables AFM §4 (alt terrain + temp.) · MTOM 3 680 kg · piste sèche · vent calme<br>
+      Distances depuis tables AFM §4 Fig.5-6a Rev.14 (3 680 kg · alt terrain + temp.) · piste sèche · vent calme · Roulement SL ISA: 564 m · Dist. 50ft SL ISA: 791 m<br>
       Montée AE: 1 201 ft/min · N-1 ROC: 118 ft/min (volets 0 · Vyse 92 kt) · Pente N-1: 1,23 %
     </div>
+
   </div>
 </div>
 
 <div>
+  <!-- EN-TETE VISIBLE UNIQUEMENT A LIMPRESSION -->
+  <div class="print-header" id="print-header">
+    <table>
+      <tr><td>Aeronef</td><td><span id="ph-immat">F-HHCT</span> &nbsp;&middot;&nbsp; Tecnam P2012 Traveller</td></tr>
+      <tr><td>Pilote CDB</td><td id="ph-pilot">--</td></tr>
+      <tr><td>Date / Heure UTC</td><td id="ph-date">--</td></tr>
+      <tr><td>Aerodrome</td><td id="ph-ap">--</td></tr>
+      <tr><td>Conditions</td><td id="ph-cond">--</td></tr>
+    </table>
+  </div>
   <div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
       <div style="display:flex;align-items:center;gap:6px">
@@ -792,6 +924,41 @@ canvas{width:100%;display:block;border-radius:var(--radius);border:1px solid var
       <div class="li"><div class="ldot" style="background:#E24B4A;border:2px solid #E24B4A"></div>Obs. insuffisant</div>
       <div class="li"><div class="ldot" style="background:#EF9F27"></div>Obs. hors axe</div>
     </div>
+
+    <!-- BLOC VALIDATION PILOTE -->
+    <div class="valid-block" id="valid-block">
+      <div class="sec">&#10003; Validation pilote</div>
+      <div class="valid-main-row" id="valid-check-row">
+        <div class="valid-left">
+          <input type="checkbox" id="v-check" onchange="onValidChange()">
+          <div class="valid-check-text">
+            <strong>Certification CDB</strong>
+            Je certifie avoir vérifié les performances de décollage conformément aux données AFM §4 du P2012, et que les distances calculées sont compatibles avec la piste et les obstacles recensés.
+          </div>
+        </div>
+        <div class="valid-right">
+          <div class="valid-field">
+            <label>Pilote CDB</label>
+            <input type="text" id="v-pilot" placeholder="Nom Prénom" oninput="onValidChange()">
+          </div>
+          <div class="valid-field">
+            <label>Immatriculation</label>
+            <input type="text" id="v-immat" placeholder="F-XXXX" value="F-HHCT" oninput="onValidChange()">
+          </div>
+          <div class="valid-field">
+            <label>Date / Heure UTC</label>
+            <input type="text" id="v-date" placeholder="JJ/MM/AAAA HHhMM" oninput="onValidChange()">
+          </div>
+        </div>
+      </div>
+      <div class="valid-status pending" id="valid-status">&#9888; Validation requise avant export</div>
+    </div>
+
+    <!-- BOUTON EXPORT PDF -->
+    <button class="pdf-btn locked" id="pdf-btn" onclick="exportPDF()">
+      &#128274; Export PDF — validation requise
+    </button>
+
   </div>
 </div>
 </div>
@@ -1191,8 +1358,8 @@ canvas{width:100%;display:block;border-radius:var(--radius);border:1px solid var
 // AFM DATA — Tecnam P2012 Traveller (CS-23, MTOM 3 680 kg)
 // ═══════════════════════════════════════════════════════════════
 const AFM = {
-  rollSL:      241,     // m ground roll SL ISA MTOM (792 ft)
-  dist50SL:    791,     // m distance over 50ft obs. SL ISA MTOM (2596 ft)
+  rollSL:      564,     // m ground roll SL ISA MTOM (1850 ft) — AFM Fig.5-6a 3680kg Rev.14
+  dist50SL:    791,     // m distance over 50ft obs. SL ISA MTOM (2595 ft) — AFM Fig.5-6a 3680kg Rev.14
   aeROC:       1201,    // ft/min AE climb rate SL ISA MTOM Vy=96 kt Flaps UP
   aeVy:        96,      // kt
 
@@ -1262,25 +1429,25 @@ const AFM = {
    19500: {'-40':-58, '-25':-118,'-15':-158, '0':-215,'15':-268,'30':-318,'50':-380},
   },
 
-  // AFM §4 takeoff dist 50ft (m): [pressAlt_ft][ISA_delta]
+  // AFM §4 takeoff dist 50ft (m): [pressAlt_ft][ISA_delta] — AFM Fig.5-6a 3680kg Rev.14 (interpolé)
   tod50: {
-     0:    {'-20':680, '-10':720,  '0':791, '10':870, '20':960,  '30':1060},
-     1000: {'-20':710, '-10':755,  '0':830, '10':915, '20':1010, '30':1115},
-     2000: {'-20':745, '-10':790,  '0':875, '10':965, '20':1065, '30':1175},
-     3000: {'-20':785, '-10':835,  '0':920, '10':1015,'20':1120, '30':1240},
-     4000: {'-20':830, '-10':880,  '0':970, '10':1070,'20':1180, '30':1305},
-     5000: {'-20':880, '-10':935,  '0':1030,'10':1135,'20':1250, '30':1380},
-     6000: {'-20':935, '-10':995,  '0':1095,'10':1205,'20':1325, '30':1460},
+     0:    {'-20':692, '-10':741,  '0':791, '10':845, '20':900,  '30':957},
+     1000: {'-20':730, '-10':783,  '0':837, '10':894, '20':952,  '30':1012},
+     2000: {'-20':771, '-10':827,  '0':886, '10':946, '20':1008, '30':1076},
+     3000: {'-20':816, '-10':874,  '0':937, '10':1002,'20':1067, '30':1152},
+     4000: {'-20':861, '-10':925,  '0':992, '10':1063,'20':1142, '30':1238},
+     5000: {'-20':912, '-10':980,  '0':1052,'10':1127,'20':1230, '30':1338},
+     6000: {'-20':965, '-10':1038, '0':1120,'10':1220,'20':1330, '30':1408},
   },
-  // AFM §4 ground roll (m): same axes
+  // AFM §4 ground roll (m): [pressAlt_ft][ISA_delta] — AFM Fig.5-6a 3680kg Rev.14 (interpolé)
   roll50: {
-     0:    {'-20':185, '-10':200,  '0':241, '10':275, '20':315,  '30':360},
-     1000: {'-20':195, '-10':215,  '0':255, '10':295, '20':335,  '30':382},
-     2000: {'-20':210, '-10':230,  '0':270, '10':310, '20':355,  '30':406},
-     3000: {'-20':225, '-10':245,  '0':288, '10':330, '20':378,  '30':432},
-     4000: {'-20':240, '-10':262,  '0':308, '10':352, '20':404,  '30':462},
-     5000: {'-20':258, '-10':282,  '0':330, '10':378, '20':433,  '30':496},
-     6000: {'-20':278, '-10':304,  '0':355, '10':407, '20':465,  '30':532},
+     0:    {'-20':491, '-10':527,  '0':564, '10':601, '20':640,  '30':681},
+     1000: {'-20':520, '-10':558,  '0':596, '10':637, '20':678,  '30':720},
+     2000: {'-20':549, '-10':589,  '0':631, '10':673, '20':717,  '30':765},
+     3000: {'-20':580, '-10':623,  '0':667, '10':712, '20':760,  '30':820},
+     4000: {'-20':613, '-10':659,  '0':706, '10':756, '20':813,  '30':881},
+     5000: {'-20':648, '-10':698,  '0':749, '10':802, '20':876,  '30':952},
+     6000: {'-20':687, '-10':739,  '0':798, '10':869, '20':946,  '30':1001},
   }
 };
 
@@ -1550,7 +1717,16 @@ function densityAlt(altFt,tempC){
 }
 function wf(mass){return Math.pow(mass/3680,1.3);}
 function df(da){return Math.max(0.05,1-da/100000*3.5);}
-function wdistF(wkt){return Math.max(0.55,1-wkt*0.013);}
+// AFM §4 Rev.14 — Vent de face : −6 % roulement / −4 % dist.50ft par 5 kt
+// Vent arrière : +20 % roulement / +15 % dist.50ft par 5 kt
+function windFactorRoll(wkt){
+  if(wkt>=0) return Math.max(0.40, 1-(wkt/5)*0.06);  // face : −6%/5kt, plancher 0.40
+  else        return 1+(Math.abs(wkt)/5)*0.20;          // arrière : +20%/5kt
+}
+function windFactorTod(wkt){
+  if(wkt>=0) return Math.max(0.40, 1-(wkt/5)*0.04);  // face : −4%/5kt, plancher 0.40
+  else        return 1+(Math.abs(wkt)/5)*0.15;          // arrière : +15%/5kt
+}
 
 function afmInterp(table, pressAltFt, tempC){
   const altKeys=[0,1000,2000,3000,4000,5000,6000];
@@ -1635,7 +1811,9 @@ function compute(){
   const wAlpha=((wDir-qfu)+360)%360;
   const windKt=+(wSpd*Math.cos(wAlpha*Math.PI/180)).toFixed(1);
   const da=densityAlt(altFt,tempC);
-  const W=wf(mass), D=df(da), Wd=wdistF(windKt);
+  const W=wf(mass), D=df(da);
+  const WdRoll=windFactorRoll(windKt);
+  const WdTod=windFactorTod(windKt);
 
   const qnh=gv('sl-qnh');
   const pressAlt=Math.round(altFt+(1013-qnh)*27);
@@ -1643,8 +1821,8 @@ function compute(){
   const aeSlope=+((aeROC/9721.8)*100).toFixed(3);
   const rollAE_ref=afmInterp(AFM.roll50,pressAlt,tempC);
   const dist50AE_ref=afmInterp(AFM.tod50,pressAlt,tempC);
-  const rollAE=Math.round(rollAE_ref*W*Wd*surf);
-  const dist50AE=Math.round(dist50AE_ref*W*Wd*surf);
+  const rollAE=Math.round(rollAE_ref*W*WdRoll*surf);
+  const dist50AE=Math.round(dist50AE_ref*W*WdTod*surf);
 
   const oeiVy=AFM.oeiVyse;
   const oeiROC=Math.round(oeiROC_interp(pressAlt, tempC, mass));
@@ -1652,7 +1830,7 @@ function compute(){
   const dist50OEI=dist50AE;
   const rollOEI=rollAE;
 
-  return {mass,da,tempC,altFt,aeROC,aeSlope,rollAE,dist50AE,oeiROC,oeiSlope,dist50OEI,rollOEI,oeiVy,eapM,eapFt,D,W,pressAlt};
+  return {mass,da,tempC,altFt,aeROC,aeSlope,rollAE,dist50AE,oeiROC,oeiSlope,dist50OEI,rollOEI,oeiVy,eapM,eapFt,D,W,WdRoll,WdTod,pressAlt};
 }
 
 function altAGL_at(dist, roll, slopePct){
@@ -1754,7 +1932,7 @@ function update(){
   let wWarnHtml='';
   if(crossComp>24) wWarnHtml='<span style="color:var(--danger)">⛔ Traversière '+crossComp.toFixed(1)+'kt > 24kt (limite P2012)</span>';
   else if(crossComp>20) wWarnHtml='<span style="color:var(--warn)">⚠️ Traversière '+crossComp.toFixed(1)+'kt — proche limite 24kt</span>';
-  if(headComp<-5) wWarnHtml+=(wWarnHtml?'<br>':'')+'<span style="color:var(--warn)">⚠️ Vent arrière '+Math.abs(headComp)+'kt — distances majorées</span>';
+  if(headComp<0) wWarnHtml+=(wWarnHtml?'<br>':'')+'<span style="color:var(--warn)">⚠️ Vent arrière '+Math.abs(headComp).toFixed(1)+'kt — distances majorées (AFM §4 : +20%/+15% par 5kt)</span>';
   document.getElementById('w-warn').innerHTML=wWarnHtml;
 
   const isOEI=mode==='OEI';
@@ -3000,8 +3178,109 @@ function importAllData(event){
   } catch(e){ /* localStorage désactivé ou erreur silencieuse */ }
 })();
 
+// ═══════════════════════════════════════════════════════════════
+// VALIDATION PILOTE + EXPORT PDF
+// ═══════════════════════════════════════════════════════════════
+function onValidChange(){
+  const pilot  = (document.getElementById('v-pilot').value  || '').trim();
+  const immat  = (document.getElementById('v-immat').value  || '').trim();
+  const date   = (document.getElementById('v-date').value   || '').trim();
+  const checked = document.getElementById('v-check').checked;
 
+  // Mise à jour style de la rangée principale
+  const row = document.getElementById('valid-check-row');
+  row.classList.toggle('checked', checked);
 
+  // Statut
+  const status = document.getElementById('valid-status');
+  const btn    = document.getElementById('pdf-btn');
+
+  if(checked && pilot && immat && date){
+    status.textContent = '\u2713 Fiche validée — prêt pour export';
+    status.className = 'valid-status ok';
+    btn.className = 'pdf-btn ready';
+    btn.textContent = '\uD83D\uDCC4 Exporter la fiche PDF';
+    // Remplir l'en-tête d'impression
+    document.getElementById('ph-pilot').textContent = pilot;
+    document.getElementById('ph-immat').textContent = immat;
+    document.getElementById('ph-date').textContent  = date;
+    // Infos aérodrome depuis les champs actifs
+    const oaci = (document.getElementById('ap-oaci')||{}).value || '';
+    const name = (document.getElementById('ap-name')||{}).value || '';
+    const qfu  = (document.getElementById('ap-qfu') ||{}).value || '';
+    const len  = (document.getElementById('ap-rwy-len')||{}).value || '';
+    document.getElementById('ph-ap').textContent = oaci+' · '+name+' · Piste '+qfu+' · '+len+' m';
+    // Conditions
+    const alt  = (document.getElementById('lv-alt') ||{}).textContent || '';
+    const qnh  = (document.getElementById('lv-qnh') ||{}).textContent || '';
+    const temp = (document.getElementById('lv-temp')||{}).textContent || '';
+    const mass = (document.getElementById('lv-mass')||{}).textContent || '';
+    document.getElementById('ph-cond').textContent = 'Alt '+alt+' · QNH '+qnh+' · Temp '+temp+' · Masse '+mass;
+  } else {
+    let msg = '\u26A0 Validation requise avant export';
+    if(!pilot)   msg = '\u26A0 Saisir le nom du pilote CDB';
+    else if(!immat) msg = '\u26A0 Saisir l\'immatriculation';
+    else if(!date)  msg = '\u26A0 Saisir la date et heure UTC';
+    else if(!checked) msg = '\u26A0 Cochez la case de certification';
+    status.textContent = msg;
+    status.className = 'valid-status pending';
+    btn.className = 'pdf-btn locked';
+    btn.textContent = '\uD83D\uDD12 Export PDF — validation requise';
+  }
+}
+
+function exportPDF(){
+  const checked = document.getElementById('v-check').checked;
+  const pilot   = (document.getElementById('v-pilot').value||'').trim();
+  const immat   = (document.getElementById('v-immat').value||'').trim();
+  const date    = (document.getElementById('v-date').value||'').trim();
+  if(!checked || !pilot || !immat || !date){
+    alert('Veuillez remplir tous les champs et cocher la case de certification avant d\'exporter.');
+    return;
+  }
+  // Afficher uniquement page1 et page2 — masquer page3 (VAC)
+  const page1 = document.getElementById('page1');
+  const page2 = document.getElementById('page2');
+  const page3 = document.getElementById('page3');
+  const prev1 = page1 ? page1.style.display : '';
+  const prev2 = page2 ? page2.style.display : '';
+  const prev3 = page3 ? page3.style.display : '';
+  if(page1) page1.style.display = 'block';
+  if(page2) page2.style.display = 'block';
+  if(page3) page3.style.display = 'none';
+
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      window.print();
+      setTimeout(()=>{
+        if(page1) page1.style.display = prev1;
+        if(page2) page2.style.display = prev2;
+        if(page3) page3.style.display = prev3;
+        const active = document.querySelector('.page-btn.active');
+        if(active) active.click();
+      }, 500);
+    });
+  });
+}
+
+// Auto-remplissage de la date/heure courante au focus si vide
+document.addEventListener('DOMContentLoaded', function(){
+  const dateInput = document.getElementById('v-date');
+  if(dateInput){
+    dateInput.addEventListener('focus', function(){
+      if(!this.value){
+        const now = new Date();
+        const d = String(now.getUTCDate()).padStart(2,'0');
+        const m = String(now.getUTCMonth()+1).padStart(2,'0');
+        const y = now.getUTCFullYear();
+        const h = String(now.getUTCHours()).padStart(2,'0');
+        const mn= String(now.getUTCMinutes()).padStart(2,'0');
+        this.value = d+'/'+m+'/'+y+' '+h+'h'+mn;
+        onValidChange();
+      }
+    });
+  }
+});
 
 </script>
 
