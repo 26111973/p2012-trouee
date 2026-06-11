@@ -1279,6 +1279,7 @@ canvas{width:100%;display:block;border-radius:var(--radius);border:1px solid var
           <button onclick="vacState.zoom=Math.min(8,vacState.zoom*1.3);drawVACOverlay()" style="background:none;border:1px solid var(--border);border-radius:var(--radius);color:var(--text2);font-size:10px;padding:3px 8px;cursor:pointer">＋</button>
           <button onclick="vacState.zoom=Math.max(0.5,vacState.zoom/1.3);drawVACOverlay()" style="background:none;border:1px solid var(--border);border-radius:var(--radius);color:var(--text2);font-size:10px;padding:3px 8px;cursor:pointer">－</button>
           <button id="vac-link-btn" data-linked="0" onclick="toggleVACLink()" style="background:none;border:2px solid #1D9E75;border-radius:var(--radius);color:#1D9E75;font-size:10px;font-weight:700;padding:3px 10px;cursor:pointer;transition:all .2s" title="Lier carte + trouée pour les déplacer ensemble">🔗 Liaison 1+2</button>
+          <button id="iac-module-toggle" onclick="toggleIACModule()" style="background:rgba(59,139,212,.12);border:2px solid #3B8BD4;border-radius:var(--radius);color:#1a5fa8;font-size:10px;font-weight:700;padding:3px 10px;cursor:pointer;transition:all .2s" title="Créer des points arbitraires sur la carte IAC">📍 Points IAC</button>
           <div style="font-size:9px;color:var(--text2);margin-top:4px;line-height:1.35">LFKB-34 : liaison OFF = régler la piste bleue ; liaison ON verte = déplacer carte + piste ensemble. Molette = zoom proportionnel.</div>
         </div>
       </div>
@@ -1334,6 +1335,45 @@ canvas{width:100%;display:block;border-radius:var(--radius);border:1px solid var
         </div>
 
       </div>
+    </div>
+
+    <!-- MODULE POINTS IAC -->
+    <div id="iac-module" style="display:none;background:rgba(214,227,238,.96);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--white)">📍 Module points IAC — contrôle relief AE / OEI Y300</div>
+          <div style="font-size:9px;color:var(--text2);line-height:1.35">Cliquez sur “Créer point”, puis cliquez plusieurs fois sur la carte : chaque point apparaît immédiatement et la route est tracée en ligne épaisse. Le relief est détecté automatiquement par la couleur du sol : bleu mer = 0 ft AMSL.</div>
+        </div>
+        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+          <button id="iac-mode-ae" onclick="setIACPerfMode('AE')" style="border:1px solid #3B8BD4;background:#3B8BD4;color:white;border-radius:4px;padding:4px 9px;font-size:10px;font-weight:700;cursor:pointer">AE</button>
+          <button id="iac-mode-oei" onclick="setIACPerfMode('OEI')" style="border:1px solid #EF9F27;background:transparent;color:#a06010;border-radius:4px;padding:4px 9px;font-size:10px;font-weight:700;cursor:pointer">OEI Y300</button>
+          <button id="iac-pick-btn" onclick="toggleIACPickMode()" style="border:1px solid var(--border);background:var(--bg4);color:var(--white);border-radius:4px;padding:4px 9px;font-size:10px;font-weight:700;cursor:pointer">＋ Créer point</button>
+          <button onclick="clearIACPoints()" style="border:1px solid rgba(181,32,32,.35);background:rgba(181,32,32,.08);color:#b52020;border-radius:4px;padding:4px 9px;font-size:10px;font-weight:700;cursor:pointer">Effacer</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;align-items:end;margin-bottom:8px">
+        <div>
+          <div style="font-size:9px;color:var(--text3);margin-bottom:3px">Relief détecté / prochain point</div>
+          <input type="number" id="iac-relief-ft" value="0" step="1" style="width:100%;padding:5px;border:1px solid var(--border);border-radius:4px;background:var(--bg2);font-family:var(--mono);font-size:11px">
+          <div style="display:grid;grid-template-columns:70px 1fr;gap:5px;margin-top:5px;align-items:center">
+            <input type="number" id="iac-correct-point-n" min="1" step="1" placeholder="Pt n°" title="Numéro du point à corriger" style="width:100%;padding:5px;border:1px solid var(--border);border-radius:4px;background:var(--bg2);font-family:var(--mono);font-size:11px">
+            <button onclick="validateIACReliefCorrection()" title="Appliquer le relief indiqué au point choisi" style="border:1px solid #1D9E75;background:rgba(29,158,117,.14);color:#0f7a56;border-radius:4px;padding:5px 7px;font-size:10px;font-weight:700;cursor:pointer">Valider correction point</button>
+          </div>
+          <div id="iac-detect-info" style="font-size:9px;color:var(--text3);margin-top:3px">Détection: —</div>
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--text3);margin-bottom:3px">Marge minimale</div>
+          <input type="number" id="iac-margin-ft" value="0" step="1" style="width:100%;padding:5px;border:1px solid var(--border);border-radius:4px;background:var(--bg2);font-family:var(--mono);font-size:11px">
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <button onclick="setIACRelief(0)" style="border:1px solid #3B8BD4;background:rgba(59,139,212,.16);color:#1a5fa8;border-radius:4px;padding:4px 7px;font-size:10px;font-weight:700;cursor:pointer">Bleu mer 0 ft</button>
+          <button onclick="setIACRelief(69)" style="border:1px solid #ddd;background:white;color:#444;border-radius:4px;padding:4px 7px;font-size:10px;font-weight:700;cursor:pointer">Blanc 69 ft</button>
+          <button onclick="setIACRelief(3527)" style="border:1px solid #c7a16a;background:#ead6b8;color:#5c3b12;border-radius:4px;padding:4px 7px;font-size:10px;font-weight:700;cursor:pointer">Marron clair 3527 ft</button>
+          <button onclick="setIACRelief(4049)" style="border:1px solid #7c4a22;background:#9a5d2f;color:white;border-radius:4px;padding:4px 7px;font-size:10px;font-weight:700;cursor:pointer">Marron foncé 4049 ft</button>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin:4px 0 6px 0"><span id="iac-mode-note"><b>MODE : AE</b> — tous moteurs sur toute la trajectoire. En OEI Y300 : AE jusqu’à 300 ft sol, puis N‑1/OEI selon les paramètres de la page 1.</span><br><b style="color:#1D9E75">Leg vert = OK</b> · <b style="color:#E24B4A">Leg rouge = NON OK</b></div>
+      <div id="iac-points-list" style="font-size:10px;color:var(--text2);overflow:auto;max-height:170px">Aucun point créé.</div>
     </div>
 
     <!-- CANVAS -->
@@ -1523,7 +1563,7 @@ function deleteCurrentProfile(){
 function captureState(){
   const fields = {};
   ['ap-oaci','ap-name','ap-qfu','ap-rwy-len','ap-thr-ft','ap-thr-m',
-   'sl-mass','sl-alt','sl-temp','sl-surf','sl-eap','in-eap','w-dir','w-spd'].forEach(id=>{
+   'sl-mass','sl-alt','sl-qnh','sl-temp','sl-surf','sl-eap','in-eap','w-dir','w-spd'].forEach(id=>{
     const el = document.getElementById(id);
     if(el) fields[id] = el.value;
   });
@@ -2012,6 +2052,18 @@ function update(){
 
   renderObsTable(r, roll, slope, rwyLen);
   drawCanvas(r, rwyLen);
+
+  // Mise à jour dynamique du module IAC : les points utilisent compute(),
+  // donc toute modification masse/température/QNH/vent en page 1 recalcule
+  // immédiatement les altitudes, marges AE et OEI Y300 affichées dans le module.
+  try{
+    const p3=document.getElementById('page3');
+    if(p3 && p3.classList.contains('active')){
+      refreshIACPoints();
+      drawVACOverlay();
+    }
+  }catch(e){}
+
   saveLastState();
 }
 
@@ -2958,6 +3010,7 @@ function drawVACOverlay(){
 }
 
 function _drawVAC(canvas, vacImg){
+  window.__iacLastVACImg = vacImg;
   const cfg = vacCfg();
   if(!vacDragInited){ initVACDrag(canvas); vacDragInited=true; }
   const ctx=canvas.getContext('2d');
@@ -3185,6 +3238,353 @@ function _drawVAC(canvas, vacImg){
   // Info position panneau
   const posInfo=document.getElementById('vac-pos-info');
   if(posInfo) posInfo.textContent='QFU affiché: '+String(qfuDisplay()).padStart(3,'0')+'°M';
+
+  // Points IAC dessinés hors zoom : visibles immédiatement et restent liés à la carte.
+  drawIACPointsOverlay(ctx, canvas);
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+// MODULE POINTS IAC — AE / OEI RELIEF CHECK v17 renumérotation points
+// ═══════════════════════════════════════════════════════════════
+let iacPointMode = 'AE';
+let iacPickMode = false;
+let iacPoints = [];
+const IAC_POINTS_KEY = 'p2012_iac_points_v2';
+
+function iacStoreKey(){ return IAC_POINTS_KEY + '_' + (currentProfile || 'default'); }
+function renumberIACPoints(){
+  // Maintient une chronologie numérique continue après suppression ou chargement.
+  if(!Array.isArray(iacPoints)) iacPoints=[];
+  iacPoints.forEach((p,i)=>{
+    if(!p || typeof p !== 'object') return;
+    p.name = 'P' + (i+1);
+    p.num = i+1;
+  });
+}
+function loadIACPoints(){ try{ iacPoints = JSON.parse(localStorage.getItem(iacStoreKey()) || '[]'); }catch(e){ iacPoints=[]; } renumberIACPoints(); }
+function saveIACPoints(){ renumberIACPoints(); try{ localStorage.setItem(iacStoreKey(), JSON.stringify(iacPoints)); }catch(e){} }
+function toggleIACModule(){ const m=document.getElementById('iac-module'); if(!m)return; m.style.display=(m.style.display==='none'||!m.style.display)?'block':'none'; refreshIACPoints(); drawVACOverlay(); }
+function setIACPerfMode(m){
+  iacPointMode=m;
+  const ae=document.getElementById('iac-mode-ae'), oe=document.getElementById('iac-mode-oei');
+  if(ae){ ae.style.background=m==='AE'?'#3B8BD4':'transparent'; ae.style.color=m==='AE'?'white':'#1a5fa8'; }
+  if(oe){ oe.style.background=m==='OEI'?'#EF9F27':'transparent'; oe.style.color=m==='OEI'?'white':'#a06010'; oe.textContent='OEI Y300'; oe.title='OEI Y300 : AE jusqu’à 300 ft AGL puis N-1/OEI'; }
+  const note=document.getElementById('iac-mode-note');
+  if(note){ note.innerHTML = m==='OEI' ? '<b>MODE : OEI Y300</b> — panne moteur prise en compte à 300 ft sol : 0→300 ft = AE, puis N‑1/OEI avec les paramètres Page 1.' : '<b>MODE : AE</b> — tous moteurs sur toute la trajectoire.'; }
+  refreshIACPoints(); drawVACOverlay();
+}
+function iacReliefLabelFromFt(ft){
+  const n=Math.round(Number(ft)||0);
+  if(n===0) return 'Bleu mer';
+  if(n===69) return 'Blanc';
+  if(n===3527) return 'Marron clair';
+  if(n===4049) return 'Marron foncé';
+  return 'Manuel';
+}
+function setIACRelief(ft){
+  const el=document.getElementById('iac-relief-ft');
+  if(el) el.value=ft;
+  const info=document.getElementById('iac-detect-info');
+  if(info) info.textContent='Relief sélectionné: '+iacReliefLabelFromFt(ft)+' '+ft+' ft';
+}
+function validateIACReliefCorrection(){
+  loadIACPoints();
+  const n=parseInt(document.getElementById('iac-correct-point-n')?.value,10);
+  const relief=iacReliefFt();
+  if(!Number.isFinite(n) || n<1 || n>iacPoints.length){
+    const info=document.getElementById('iac-detect-info');
+    if(info) info.textContent='Correction impossible: indiquez un numéro de point valide entre 1 et '+iacPoints.length+'.';
+    return;
+  }
+  const idx=n-1;
+  iacPoints[idx].reliefFt=relief;
+  iacPoints[idx].reliefLabel=iacReliefLabelFromFt(relief);
+  iacPoints[idx].manualRelief=true;
+  saveIACPoints();
+  refreshIACPoints();
+  drawVACOverlay();
+  const info=document.getElementById('iac-detect-info');
+  if(info) info.textContent='Correction validée: P'+n+' = '+iacPoints[idx].reliefLabel+' '+relief+' ft.';
+}
+
+function toggleIACPickMode(){
+  iacPickMode=!iacPickMode;
+  const b=document.getElementById('iac-pick-btn');
+  const c=document.getElementById('vac-canvas');
+  if(b){ b.textContent=iacPickMode?'Mode actif : cliquez plusieurs points':'＋ Créer point'; b.style.background=iacPickMode?'#1D9E75':'var(--bg4)'; b.style.color=iacPickMode?'white':'var(--white)'; }
+  if(c) c.style.cursor=iacPickMode?'crosshair':'grab';
+}
+function clearIACPoints(){ iacPoints=[]; saveIACPoints(); refreshIACPoints(); drawVACOverlay(); }
+function deleteIACPoint(i){
+  loadIACPoints();
+  if(i<0 || i>=iacPoints.length) return;
+  iacPoints.splice(i,1);
+  renumberIACPoints();
+  saveIACPoints();
+  refreshIACPoints();
+  drawVACOverlay();
+}
+function iacReliefFt(){ const v=parseFloat(document.getElementById('iac-relief-ft')?.value); return Number.isFinite(v)?v:0; }
+function iacMarginFt(){ const v=parseFloat(document.getElementById('iac-margin-ft')?.value); return Number.isFinite(v)?v:0; }
+
+function iacCanvasToNative(canvas, ev){
+  const cfg=vacCfg(); const rect=canvas.getBoundingClientRect();
+  const t=ev.touches ? ev.touches[0] : ev;
+  const cx=(t.clientX-rect.left)*cfg.imgW/rect.width;
+  const cy=(t.clientY-rect.top)*cfg.imgW/rect.width;
+  return {x:(cx-vacState.panX)/vacState.zoom, y:(cy-vacState.panY)/vacState.zoom};
+}
+
+function iacClassifyReliefPixel(r,g,b){
+  const max=Math.max(r,g,b), min=Math.min(r,g,b), bright=(r+g+b)/3;
+  const sat = max<=0 ? 0 : (max-min)/max;
+  // Classification relief IAC verrouillée :
+  //  - bleu / mer           => 0 ft AMSL
+  //  - blanc / terre basse  => 69 ft AMSL
+  //  - marron clair/beige   => 3527 ft AMSL
+  //  - marron foncé         => 4049 ft AMSL
+  // On donne d'abord la priorité aux zones blanches très claires pour éviter
+  // de confondre un blanc légèrement bleuté avec la mer.
+  if(bright>=215 && sat<=0.16) return {ft:69,label:'Blanc'};
+
+  // Bleu mer : dominante bleue/cyan, suffisamment saturée ou nettement plus bleue que rouge.
+  if((b>=r+10 && b>=g+3 && bright>80) || (b>145 && g>120 && r<210 && (b-r)>12)){
+    return {ft:0,label:'Bleu mer'};
+  }
+
+  // Blanc / gris très clair restant : zone basse terre.
+  if(bright>=188 && sat<=0.22) return {ft:69,label:'Blanc'};
+
+  // Marron foncé : zone relief élevée sombre.
+  if(r>=g+8 && g>=b-10 && bright<150 && sat>=0.12) return {ft:4049,label:'Marron foncé'};
+
+  // Marron clair / beige : zone relief intermédiaire.
+  if(r>=g-4 && r>=b+10 && bright>=105 && bright<235 && sat>=0.07) return {ft:3527,label:'Marron clair'};
+
+  return null;
+}
+
+function iacNearestReliefPixel(r,g,b){
+  // Secours robuste si un pixel est anti-crénelé ou imprimé avec une variante de teinte.
+  // Les couleurs de référence sont volontairement larges et correspondent aux 4 zones utiles.
+  const refs=[
+    {ft:0,label:'Bleu mer',rgb:[170,205,225]},
+    {ft:69,label:'Blanc',rgb:[245,245,238]},
+    {ft:3527,label:'Marron clair',rgb:[226,199,157]},
+    {ft:4049,label:'Marron foncé',rgb:[145,93,55]}
+  ];
+  let best=null, bestD=Infinity;
+  for(const ref of refs){
+    const [rr,gg,bb]=ref.rgb;
+    const d=(r-rr)*(r-rr)+(g-gg)*(g-gg)+(b-bb)*(b-bb);
+    if(d<bestD){ bestD=d; best=ref; }
+  }
+  return best ? {ft:best.ft,label:best.label} : null;
+}
+
+function iacGetBaseReliefSampleCanvas(){
+  // Canvas invisible contenant uniquement la carte IAC/VAC, sans points, sans route jaune,
+  // sans trouée AE/OEI et sans obstacles ajoutés. La détection du relief se fait dessus.
+  const cfg=vacCfg(); const img=window.__iacLastVACImg;
+  if(!cfg || !img) return null;
+  if(!window.__iacBaseReliefCanvas || window.__iacBaseReliefKey !== (vacActiveAP+'_'+currentProfile+'_'+cfg.imgW+'x'+cfg.imgH+'_'+(img.src||''))){
+    const off=document.createElement('canvas');
+    off.width=cfg.imgW; off.height=cfg.imgH;
+    const octx=off.getContext('2d', {willReadFrequently:true}) || off.getContext('2d');
+    octx.drawImage(img,0,0,cfg.imgW,cfg.imgH);
+    window.__iacBaseReliefCanvas=off;
+    window.__iacBaseReliefKey=(vacActiveAP+'_'+currentProfile+'_'+cfg.imgW+'x'+cfg.imgH+'_'+(img.src||''));
+  }
+  return window.__iacBaseReliefCanvas;
+}
+
+function iacChooseReliefFromCounts(counts, centerCounts){
+  const labels={0:'Bleu mer',69:'Blanc',3527:'Marron clair',4049:'Marron foncé'};
+  // Priorité absolue au centre du clic : le point correspond à la couleur sous le curseur,
+  // pas à la couleur dominante des pixels voisins.
+  const order=[0,69,3527,4049];
+  let centerBest=order.slice().sort((a,b)=>(centerCounts[b]||0)-(centerCounts[a]||0))[0];
+  if((centerCounts[centerBest]||0) >= 1){
+    return {reliefFt:centerBest,label:labels[centerBest]};
+  }
+  // Sinon majorité locale sur la petite zone autour du clic.
+  let best=order.slice().sort((a,b)=>(counts[b]||0)-(counts[a]||0))[0];
+  if((counts[best]||0) > 0) return {reliefFt:best,label:labels[best]};
+  return null;
+}
+
+function iacDetectReliefFromCanvas(canvas, ev){
+  // Détection corrigée : on lit la carte de base invisible, pas le canvas affiché.
+  // Donc les points déjà créés, la route jaune, les textes ajoutés et les obstacles ne peuvent plus fausser la couleur.
+  // Bleu = mer = 0 ft AMSL ; blanc = 69 ft AMSL ; marron clair = 3527 ft ; marron foncé = 4049 ft.
+  try{
+    const native=iacCanvasToNative(canvas, ev);
+    const base=iacGetBaseReliefSampleCanvas();
+    if(!base) throw new Error('base map unavailable');
+    const ctx=base.getContext('2d', {willReadFrequently:true}) || base.getContext('2d');
+    const cx=Math.max(0,Math.min(base.width-1,Math.round(native.x)));
+    const cy=Math.max(0,Math.min(base.height-1,Math.round(native.y)));
+    const radius=8;
+    const x0=Math.max(0,cx-radius), y0=Math.max(0,cy-radius);
+    const w=Math.min(base.width-x0, radius*2+1), h=Math.min(base.height-y0, radius*2+1);
+    const data=ctx.getImageData(x0,y0,w,h).data;
+    const counts={0:0,69:0,3527:0,4049:0};
+    const centerCounts={0:0,69:0,3527:0,4049:0};
+    for(let yy=0; yy<h; yy++){
+      for(let xx=0; xx<w; xx++){
+        const i=(yy*w+xx)*4;
+        const r=data[i], g=data[i+1], b=data[i+2], a=data[i+3];
+        if(a<180) continue;
+        // Ignore textes/traits imprimés très foncés, mais pas les couleurs de relief.
+        if(r<35 && g<35 && b<35) continue;
+        const c=iacClassifyReliefPixel(r,g,b);
+        if(c){
+          counts[c.ft]++;
+          if(Math.abs((x0+xx)-cx)<=2 && Math.abs((y0+yy)-cy)<=2) centerCounts[c.ft]++;
+        }
+      }
+    }
+    let chosen=iacChooseReliefFromCounts(counts, centerCounts);
+    if(!chosen){
+      // Dernier recours : pixel exact, puis valeur manuelle si non reconnu.
+      const px=ctx.getImageData(cx,cy,1,1).data;
+      let c=iacClassifyReliefPixel(px[0],px[1],px[2]);
+      if(!c) c=iacNearestReliefPixel(px[0],px[1],px[2]);
+      chosen=c ? {reliefFt:c.ft,label:c.label} : {reliefFt:iacReliefFt(),label:'Manuel'};
+    }
+    const reliefFt=Number(chosen.reliefFt), label=chosen.label||'Manuel';
+    const el=document.getElementById('iac-relief-ft'); if(el) el.value=reliefFt;
+    const info=document.getElementById('iac-detect-info');
+    if(info){ const c0=counts[0]||0, c69=counts[69]||0, c3527=counts[3527]||0, c4049=counts[4049]||0; info.textContent='Détection: '+label+' '+reliefFt+' ft | B0:'+c0+' W69:'+c69+' MC3527:'+c3527+' MF4049:'+c4049; }
+    return {reliefFt,label,counts,centerCounts};
+  }catch(e){ return {reliefFt:iacReliefFt(),label:'Manuel'}; }
+}
+function initIACPointPicking(canvas){
+  if(canvas.__iacPickInit) return; canvas.__iacPickInit=true;
+  const create=function(ev){
+    if(!iacPickMode) return;
+    ev.preventDefault(); ev.stopImmediatePropagation();
+    const p=iacCanvasToNative(canvas, ev);
+    const det=iacDetectReliefFromCanvas(canvas, ev);
+    loadIACPoints();
+    iacPoints.push({x:p.x,y:p.y,reliefFt:det.reliefFt,reliefLabel:det.label,name:'P'+(iacPoints.length+1)});
+    saveIACPoints();
+    // Le mode création reste actif pour permettre de sélectionner plusieurs points de suite.
+    const b=document.getElementById('iac-pick-btn');
+    if(b){ b.textContent='Mode actif : cliquez plusieurs points'; b.style.background='#1D9E75'; b.style.color='white'; }
+    canvas.style.cursor='crosshair';
+    refreshIACPoints();
+    drawVACOverlay();
+  };
+  canvas.addEventListener('mousedown', create, true);
+  canvas.addEventListener('touchstart', create, {capture:true, passive:false});
+}
+function iacGeometry(canvas){
+  const cfg=vacCfg(); if(!cfg) return null;
+  const W=canvas.width, H=canvas.height; const sx=W/cfg.imgW, sy=H/cfg.imgH;
+  const vv=rwvVec();
+  const halfPx=(cfg.pxPerM * vacState.rwyLenM)/2;
+  const s05={x:vacState.cx-vv.x*halfPx, y:vacState.cy-vv.y*halfPx};
+  const s23={x:vacState.cx+vv.x*halfPx, y:vacState.cy+vv.y*halfPx};
+  return {cfg,sx,sy,vv,s05,s23,pxPerM:cfg.pxPerM};
+}
+function iacModuleAGL_at(distM, r){
+  // Module IAC :
+  // AE = performances tous moteurs depuis le lâcher des freins.
+  // OEI Y300 = AE jusqu'à 300 ft sol, puis montée N-1/OEI avec les paramètres Page 1
+  // (masse, altitude pression via QNH/altitude terrain, température, vent et surface).
+  const modeNow = iacPointMode || 'AE';
+  if(modeNow !== 'OEI') return altAGL_at(distM, r.rollAE, r.aeSlope);
+
+  const switchAGLM = 300 * 0.3048;
+  const aeSlope = Math.max(0.0001, (r.aeSlope || 0) / 100);
+  const oeiSlope = Math.max(0.0001, (r.oeiSlope || 0) / 100);
+  const distAt300 = (r.rollAE || 0) + switchAGLM / aeSlope;
+
+  if(distM <= distAt300){
+    return altAGL_at(distM, r.rollAE, r.aeSlope);
+  }
+  return switchAGLM + (distM - distAt300) * oeiSlope;
+}
+
+function iacModulePhase_at(distM, r){
+  if((iacPointMode || 'AE') !== 'OEI') return 'AE';
+  const switchAGLM = 300 * 0.3048;
+  const aeSlope = Math.max(0.0001, (r.aeSlope || 0) / 100);
+  const distAt300 = (r.rollAE || 0) + switchAGLM / aeSlope;
+  return distM <= distAt300 ? 'AE→Y300' : 'N-1 après Y300';
+}
+
+function iacPointResult(pt, canvas){
+  const g=iacGeometry(canvas); if(!g) return null;
+  const r=compute();
+  const mapX=pt.x*g.sx, mapY=pt.y*g.sy;
+  const wx=mapX*vacState.zoom + vacState.panX*g.sx;
+  const wy=mapY*vacState.zoom + vacState.panY*g.sy;
+  // Distance de performance : décollage depuis le seuil de départ + longueur piste + distance au-delà du seuil opposé.
+  const beyondPx=(pt.x-g.s23.x)*g.vv.x + (pt.y-g.s23.y)*g.vv.y;
+  const beyondM=Math.max(0, beyondPx/(g.pxPerM||1));
+  const distM=(vacState.rwyLenM||0)+beyondM;
+  const aglM=iacModuleAGL_at(distM,r);
+  const phase=iacModulePhase_at(distM,r);
+  const thrFt=parseFloat(document.getElementById('ap-thr-ft')?.value)||0;
+  const rawAcFt=thrFt + aglM/0.3048;
+  // Plafond maximum du module IAC : quand l'avion atteint 9000 ft AMSL,
+  // il reste à cette altitude. Les marges relief sont donc calculées avec 9000 ft maximum.
+  const acMaxFt=9000;
+  const acLimited=rawAcFt>acMaxFt;
+  const acFt=Math.min(rawAcFt, acMaxFt);
+  const reliefFt=Number.isFinite(parseFloat(pt.reliefFt))?parseFloat(pt.reliefFt):0;
+  const marginFt=acFt-reliefFt;
+  return {x:wx,y:wy,distM,acFt,rawAcFt,acLimited,aglM,phase,reliefFt,marginFt,ok:marginFt>=iacMarginFt()};
+}
+function refreshIACPoints(){
+  const list=document.getElementById('iac-points-list'); if(!list) return;
+  loadIACPoints();
+  const canvas=document.getElementById('vac-canvas');
+  if(!iacPoints.length){ list.innerHTML='<div style="padding:6px;color:var(--text3)">Aucun point créé.</div>'; return; }
+  let html='<table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10px"><thead><tr><th style="text-align:left;padding:4px;border-bottom:1px solid var(--border)">Point</th><th style="text-align:right;padding:4px;border-bottom:1px solid var(--border)">Dist perf. (NM)</th><th style="text-align:right;padding:4px;border-bottom:1px solid var(--border)">Relief</th><th style="text-align:right;padding:4px;border-bottom:1px solid var(--border)">Avion '+(iacPointMode==='OEI'?'OEI Y300':'AE')+'</th><th style="text-align:right;padding:4px;border-bottom:1px solid var(--border)">Marge</th><th></th></tr></thead><tbody>';
+  iacPoints.forEach((p,i)=>{ const res=canvas?iacPointResult(p,canvas):null; const ok=res&&res.ok; const col=ok?'#0f7a56':'#b52020'; html+='<tr><td style="padding:4px;border-bottom:1px solid rgba(0,0,0,.08)">'+(p.name||('P'+(i+1)))+'</td><td style="text-align:right;padding:4px;border-bottom:1px solid rgba(0,0,0,.08)">'+(res?(res.distM/1852).toFixed(2)+' NM':'—')+'</td><td style="text-align:right;padding:4px;border-bottom:1px solid rgba(0,0,0,.08)">'+(p.reliefFt||0)+' ft '+(p.reliefLabel?'<span style=\"color:var(--text3)\">('+p.reliefLabel+(p.manualRelief?' corrigé':'')+')</span>':'')+'</td><td style="text-align:right;padding:4px;border-bottom:1px solid rgba(0,0,0,.08)">'+(res?Math.round(res.acFt)+' ft <span style=\"color:var(--text3);font-size:9px\">'+(res.phase||'')+'</span>':'—')+'</td><td style="text-align:right;padding:4px;border-bottom:1px solid rgba(0,0,0,.08);font-weight:700;color:'+col+'">'+(res?(res.marginFt>=0?'+':'')+Math.round(res.marginFt)+' ft':'—')+'</td><td style="text-align:right"><button onclick="deleteIACPoint('+i+')" style="border:1px solid rgba(181,32,32,.35);background:rgba(181,32,32,.08);color:#b52020;border-radius:3px;padding:2px 6px;cursor:pointer">×</button></td></tr>'; });
+  html+='</tbody></table>'; list.innerHTML=html;
+}
+function drawIACPointsOverlay(ctx, canvas){
+  initIACPointPicking(canvas);
+  loadIACPoints();
+  if(!iacPoints.length){ refreshIACPoints(); return; }
+  ctx.save();
+  // Route de départ : ligne épaisse reliant les points dans l'ordre de création.
+  const route=[];
+  iacPoints.forEach(p=>{ const rr=iacPointResult(p,canvas); if(rr) route.push(rr); });
+  if(route.length>=2){
+    // Legs IAC : plus de ligne jaune. Chaque segment est validé séparément.
+    // Vert = les deux points du leg ont une marge >= marge mini ; Rouge = au moins un point du leg est non conforme.
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    for(let i=1;i<route.length;i++){
+      const a=route[i-1], b=route[i];
+      const legOk = !!(a.ok && b.ok);
+      const legColor = legOk ? '#1D9E75' : '#E24B4A';
+      // contour foncé pour que le leg reste visible sur la carte IAC
+      ctx.strokeStyle='rgba(8,18,32,.88)'; ctx.lineWidth=13;
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      ctx.strokeStyle=legColor; ctx.lineWidth=9;
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      // Aucune étiquette texte sur la carte : seulement la couleur du leg.
+      // Le détail OK/NON OK et la marge restent disponibles dans le tableau du module.
+    }
+  }
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  iacPoints.forEach((p,i)=>{
+    const res=iacPointResult(p,canvas); if(!res)return;
+    const col=res.ok?'#1D9E75':'#E24B4A';
+    ctx.fillStyle='rgba(255,255,255,.96)'; ctx.strokeStyle='rgba(0,0,0,.95)'; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.arc(res.x,res.y,12,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle=col; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(res.x,res.y,8,0,Math.PI*2); ctx.stroke();
+    // Point seul sur la carte : pas d'étiquette de marge afin de garder la carte lisible.
+    ctx.fillStyle=col; ctx.font='700 12px IBM Plex Mono,monospace'; ctx.fillText(String(i+1),res.x,res.y+0.5);
+  });
+  ctx.restore();
+  refreshIACPoints();
 }
 
 // Initialiser les contrôles VAC depuis VAC_DEFAULT (après définition des constantes)
@@ -3216,7 +3616,8 @@ function exportAllData(){
     profiles: JSON.parse(localStorage.getItem('p2012_profiles_v1') || '{}'),
     lastState: JSON.parse(localStorage.getItem('p2012_laststate_v1') || 'null'),
     vacState: JSON.parse(localStorage.getItem('p2012_vac_state_v1') || 'null'),
-    vacPositions: JSON.parse(localStorage.getItem('p2012_vac_positions_v1') || '{}')
+    vacPositions: JSON.parse(localStorage.getItem('p2012_vac_positions_v1') || '{}'),
+    iacPoints: Object.keys(localStorage).filter(k=>k.startsWith('p2012_iac_points_v2')).reduce((a,k)=>{a[k]=JSON.parse(localStorage.getItem(k)||'[]');return a;},{})
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
   const url = URL.createObjectURL(blob);
